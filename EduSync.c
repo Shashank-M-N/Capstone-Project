@@ -2680,7 +2680,7 @@ int main()
     }
     fclose(file);
 
-    if (!PlaySound(TEXT("begin.wav"), NULL, SND_FILENAME | SND_ASYNC)) {
+    if (!PlaySound(TEXT("begin.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP )) {
         printf("Error playing music.\n");
         exit(1);
     }
