@@ -60,6 +60,9 @@ void exitproject()
     free(students);
     free(students_attendance);
 
+    PlaySound(TEXT("ending.wav"), NULL, SND_FILENAME | SND_ASYNC);
+    Sleep(2000);
+
     char ThankYou[] = " ========= Thank You =========\n";
     char SeeYouSoon[] = " ======== See You Soon =======\n";
     // for creating the animation.
@@ -137,7 +140,7 @@ void view(int i, bool b)
     }
     fclose(file);
 
-    int totalmarks = 0, temp = 4;
+    int totalmarks = 0, temp = 0;
     float cg = 0, totalcg = 0;
     bool a = 1;
     for (int j = 0; j < no_subjects; j++)
@@ -1631,11 +1634,15 @@ void viewSortedList()
         }
     }
 
-    printf("Students ranked in decreasing order of cgpa:\n");
-    for (int i = 0; i < num_students; i++)
+    if (num_students)
     {
-        printf("%.2f     %s     %s\n", sorted_list[i], students[arr_pos[i]].roll_no, students[arr_pos[i]].name);
+        printf("Students ranked in decreasing order of cgpa:\n");
+        for (int i = 0; i < num_students; i++)
+        {
+            printf("%.2f     %s     %s\n", sorted_list[i], students[arr_pos[i]].roll_no, students[arr_pos[i]].name);
+        }
     }
+    else printf("cgpa has not been updated for any student\n");
 }
 
 // function to view students of a particular branch in decreasing order of their cgpa (By admin)
@@ -1718,11 +1725,16 @@ void viewSortedList_branch(int input)
         }
     }
 
-    printf("\nStudents ranked in decreasing order of cgpa:\n");
-    for (int i = 0; i < num_students_branch; i++)
+    if (num_students_branch)
     {
-        printf("%.2f     %s     %s\n", sorted_list_branch[i], students[arr_pos[i]].roll_no, students[arr_pos[i]].name);
+        printf("\nStudents ranked in decreasing order of cgpa:\n");
+        for (int i = 0; i < num_students_branch; i++)
+        {
+            printf("%.2f     %s     %s\n", sorted_list_branch[i], students[arr_pos[i]].roll_no, students[arr_pos[i]].name);
+        }
     }
+
+    else printf("cgpa has not been updated for any student of %s branch\n", branch);
 }
 
 // function to view students of a particular subject in decreasing order of their marks.
@@ -1734,7 +1746,7 @@ void viewSortedList_sub(char Sub[])
         if (strcmp(Sub, sub[j].subjectname) == 0)
         {
             int num_students_sub = 0, total_students_sub = 0;
-            // Here total_students_sub refers to the number of students who are registered for that particular subject whil num_students_sub refers to the number of students whose marks have been updated
+            // Here total_students_sub refers to the number of students who are registered for that particular subject while num_students_sub refers to the number of students whose marks have been updated
             for (int k = 1; k < count - 1; k++)
             {
                 if (students[k].marks[j] >= 0)
@@ -1782,10 +1794,13 @@ void viewSortedList_sub(char Sub[])
                 }
             }
 
-            printf("\nStudents ranked in decreasing order of marks:\n");
-            for (int k = 0; k < num_students_sub; k++)
+            if (num_students_sub)
             {
-                printf("%d     %s     %s\n", sorted_list_sub[k], students[arr_pos[k]].roll_no, students[arr_pos[k]].name);
+                printf("\nStudents ranked in decreasing order of marks:\n");
+                for (int k = 0; k < num_students_sub; k++)
+                {
+                    printf("%d     %s     %s\n", sorted_list_sub[k], students[arr_pos[k]].roll_no, students[arr_pos[k]].name);
+                }
             }
 
             if (total_students_sub - num_students_sub)
@@ -1941,7 +1956,7 @@ void reject_leave(char buf1[])
     char *cp;
     char buf[1000];
     char buf2[1000];
-    // deletes the accepted leave application from the file and restores the rest.
+    // deletes the rejected leave application from the file and restores the rest.
     while (1)
     {
         // get a line
@@ -2277,11 +2292,9 @@ void admin_login()
             char rollno1[] = "000000";
             bool if_student_present1 = 0;
             scanf("%s", rollno1);
-            // printf("%d", count);
             for (int i = 1; i < count - 1; i++)
                 if (strcmp(students[i].roll_no, rollno1) == 0)
                 {
-                    // printf("%d", i);
                     edit_students_info(i);
                     if_student_present1 = 1;
                     break;
@@ -2586,6 +2599,7 @@ v:
     printf("||      5: Exit               ||\n");
     printf("================================\n");
     printf("Enter the choice: ");
+    PlaySound(NULL, NULL, SND_PURGE);
     choice = is_digit();
     system("cls");
     switch (choice)
@@ -2616,6 +2630,13 @@ v:
 // description about project.
 void aboutus()
 {
+    if (!PlaySound(TEXT("begin.wav"), NULL, SND_FILENAME | SND_ASYNC)) {
+        printf("Error playing music.\n");
+        exit(0);
+    }
+
+    Sleep(1000);
+
     char Intro[] = "                               *************************************                               \n--> This project is a collaborative effort by the authors to create a student database management portal,\n    incorporating various possible features typically present in such a system.\n--> The code, in its entirety, is based solely on C language, as per the project requirements.\n                               *************************************                               \n\n";
     for (int i = 0; i < strlen(Intro); i++)
     {
@@ -2623,7 +2644,7 @@ void aboutus()
         Sleep(20);
     }
 
-    char Authors[] = "===========================================\n|| Sl.no. |     Authors     | Roll number ||\n===========================================\n||   1.   |  Adarsh Chandra |  23CS01001  ||\n||   2.   |  Shashank M N   |  23CS02010  ||\n||   3.   |  Arit Gandhi    |  23CS01006  ||\n||   4.   |  Deep Jindal    |  23CS02002  ||\n||   5.   |  Vineet Kumar   |  23CS01068  ||\n===========================================\n\n";
+    char Authors[] = "============================================\n|| Sl.no. |     Authors     | Roll number ||\n============================================\n||   1.   |  Adarsh Chandra |  23CS01001  ||\n||   2.   |  Shashank M N   |  23CS02010  ||\n||   3.   |  Arit Gandhi    |  23CS01006  ||\n||   4.   |  Deep Jindal    |  23CS02002  ||\n||   5.   |  Vineet Kumar   |  23CS01068  ||\n============================================\n\n";
     for (int i = 0; i < strlen(Authors); i++)
     {
         printf("%c", Authors[i]);
@@ -2637,6 +2658,7 @@ void aboutus()
     int choice;
     printf("\nEnter  1: Go to Main Menu\n       2: Exit\n");
     printf("Enter the choice: ");
+    PlaySound(NULL, NULL, SND_PURGE);
     scanf("%d", &choice);
     if (choice == 1)
     {
@@ -2657,6 +2679,13 @@ int main()
         retrieve_attendance();
     }
     fclose(file);
+
+    if (!PlaySound(TEXT("begin.wav"), NULL, SND_FILENAME | SND_ASYNC)) {
+        printf("Error playing music.\n");
+        exit(1);
+    }
+
+    Sleep(2000);
 
     char Welcome[] = "        ****************************        \n  Welcome to EduSync : Academic Profile Portal  \n        ****************************        \n";
     for (int i = 0; i < strlen(Welcome); i++)
