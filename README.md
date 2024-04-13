@@ -24,6 +24,24 @@ The project demonstrates a database management system's core format with attempt
 - Compile and run "EduSync.c" after downloading both "EduSync.c" and "election.h".
 - Use provided credentials for Admin login or automatic password generation for new students and faculty.
 
+## Compilation Instructions
+
+This guide assumes that `gcc` is already configured in your system. If not, please install and configure it first.
+
+### Compiling the Source Code
+
+Use the following command to compile the `EduSync.c` file:
+
+```bash
+gcc -o EduSync.exe EduSync.c -lwinmm
+```
+This command does the following:
+
+- `gcc` : Calls the GNU Compiler Collection to compile the code.
+- `-o EduSync.exe` : Specifies the output file name (`EduSync.exe`).
+- `EduSync.c` : The C source file to be compiled.
+- `-lwinmm` : Links the `winmm` library. This is a Windows multimedia API library used for functions related to background music in the program.
+
 ## Conclusion
 
 The project enhanced skills in programming, database management, and data structures. It provided insight into joint project development, increasing innovation and error handling.
